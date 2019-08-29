@@ -1,14 +1,26 @@
-expose:
-  Args: 
-    - --v
-    - 4
-  Annotations:
-    helm.sh/hook: post-install,post-upgrade
-    helm.sh/hook-delete-policy: hook-succeeded
-
+PipelineSecrets:
+  DockerConfig: '{"auths":{"jejakaks.azurecr.io":{"auth":"amVqYWtha3M6QUlac0FLa2xWVE51TFdPZm1VM2lHNTB4U2J1RTVHNys="}}}'
 cleanup:
-  Args: 
-    - --cleanup
   Annotations:
     helm.sh/hook: pre-delete
     helm.sh/hook-delete-policy: hook-succeeded
+  Args:
+  - --cleanup
+expose:
+  Annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-delete-policy: hook-succeeded
+  Args:
+  - --v
+  - 4
+  config:
+    domain: 52.187.170.223.nip.io
+    exposer: Ingress
+    http: "true"
+jenkins:
+  Servers:
+    Global:
+      EnvVars:
+        DOCKER_REGISTRY: jejakaks.azurecr.io
+        TILLER_NAMESPACE: kube-system
+prow: {}
